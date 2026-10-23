@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10111a">
+<title>SH AI Video — Създавай истории</title>
+<style>
+:root {
+  --site-primary: #7857ff;
+  --site-secondary: #171927;
+  --site-background: #0c0d14;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #f3f2ff;
+  --site-on-background: #f4f3fb;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --panel: #141622;
+  --muted: #a6a7ba;
+  --line: #2a2c40;
+  --accent2: #23d6c8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+#app { min-height: 100vh; width: 100%; background: light-dark(var(--site-background), var(--site-background)); color: var(--site-on-background); border-radius: 0; overflow: hidden; }
+.topbar { max-width: 1180px; margin: 0 auto; padding: calc(22px * var(--site-spacing-scale)) 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.brand { display:flex; align-items:center; gap:11px; font-weight:800; letter-spacing:-.04em; }
+.brandmark { width:40px; height:40px; border-radius: calc(13px * var(--site-radius-scale)); display:grid; place-items:center; background:linear-gradient(135deg,var(--site-primary),#bd67ff); box-shadow:0 8px 28px #7857ff55; color:white; font-weight:900; }
+.brandname { font-size:19px; }
+.brandname span { color:#a996ff; }
+.pill { border:1px solid #33354a; border-radius:999px; padding:8px 12px; color:#c4c5d6; font-size:12px; white-space:nowrap; }
+.hero { position:relative; max-width:1180px; margin:0 auto; padding:46px 24px 36px; display:grid; grid-template-columns:1.05fr .95fr; gap:38px; align-items:center; }
+.glow { position:absolute; width:390px; height:280px; right:7%; top:10px; background:#7757ff30; filter:blur(70px); pointer-events:none; opacity:var(--site-decoration-opacity); }
+.eyebrow { color:var(--accent2); text-transform:uppercase; letter-spacing:.16em; font-weight:800; font-size:11px; }
+h1 { font-family:var(--site-font-heading); font-size:calc(clamp(40px,6vw,68px) * var(--site-heading-scale)); line-height:.99; letter-spacing:-.065em; margin:16px 0; max-width:650px; }
+h1 em { font-style:normal; color:#a996ff; }
+.lead { color:#b5b6c9; font-size:16px; line-height:1.7; max-width:540px; }
+.hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+.btn { border:0; border-radius:calc(13px * var(--site-radius-scale)); padding:13px 17px; font-weight:750; display:inline-flex; align-items:center; justify-content:center; gap:9px; }
+.btn-primary { background:var(--site-primary); color:white; box-shadow:0 9px 28px #7857ff45; }
+.btn-primary:hover { filter:brightness(1.1); }
+.btn-secondary { color:#f1f0ff; background:#202235; border:1px solid #34364b; }
+.hero-note { color:#777a91; font-size:12px; margin-top:15px; }
+.preview-art { min-height:310px; border:1px solid #34344c; border-radius:24px; padding:16px; background:linear-gradient(145deg,#1a1b2b,#11121d); position:relative; box-shadow:0 30px 80px #0005; }
+.art-window { height:100%; min-height:278px; border-radius:17px; overflow:hidden; position:relative; background:radial-gradient(ellipse at 70% 20%,#5d4aa8 0,transparent 30%),linear-gradient(155deg,#262d54 0%,#14192e 48%,#0c0e18 100%); }
+.star { position:absolute; width:3px; height:3px; background:#fff; border-radius:50%; opacity:.75; }
+.moon { position:absolute; right:15%; top:12%; width:48px; height:48px; border-radius:50%; background:#e5ddff; box-shadow:0 0 42px #c4b5ff88; }
+.city { position:absolute; bottom:0; left:0; right:0; height:60%; display:flex; align-items:flex-end; gap:5px; padding:0 8%; }
+.building { flex:1; min-width:12px; background:linear-gradient(180deg,#424b80,#171d39); border:1px solid #6772a155; position:relative; }
+.building:after { content:""; position:absolute; inset:10px 5px; background:repeating-linear-gradient(0deg,transparent 0 12px,#72e8ff8a 13px 15px),repeating-linear-gradient(90deg,transparent 0 10px,#72e8ff50 11px 12px); }
+.character { position:absolute; bottom:9%; left:42%; width:78px; height:128px; }
+.character .head { position:absolute; top:0; left:24px; width:34px; height:38px; border-radius:45% 45% 40% 40%; background:#d69b76; border:3px solid #201c2c; }
+.character .hair { position:absolute; z-index:2; top:-4px; left:22px; width:36px; height:18px; background:#241a24; border-radius:60% 45% 20% 20%; transform:rotate(-8deg); }
+.character .body { position:absolute; bottom:0; left:10px; width:62px; height:91px; border-radius:24px 24px 4px 4px; background:linear-gradient(110deg,#282b48,#0c0e19); border:2px solid #454a70; }
+.art-caption { position:absolute; left:20px; bottom:18px; z-index:3; }
+.art-caption small { color:#b7b6d9; letter-spacing:.13em; text-transform:uppercase; font-size:9px; }
+.art-caption strong { display:block; font-size:18px; margin-top:5px; }
+.floating-tag { position:absolute; right:27px; bottom:27px; border:1px solid #555078; background:#18172bbf; backdrop-filter:blur(10px); padding:10px 12px; border-radius:12px; font-size:11px; color:#e4e1ff; }
+main { max-width:1180px; margin:0 auto; padding:10px 24px 70px; }
+.section-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin:20px 0 16px; }
+h2 { font-size:23px; letter-spacing:-.04em; margin:0; }
+.section-sub { color:var(--muted); font-size:13px; margin-top:7px; }
+.workspace { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:calc(20px * var(--site-radius-scale)); padding:22px; }
+.label { display:block; font-weight:700; font-size:13px; margin:0 0 9px; }
+textarea, select, input[type="text"] { width:100%; color:#f4f3fb; background:#0e101a; border:1px solid #34364c; border-radius:12px; padding:13px 14px; outline:none; }
+textarea { min-height:125px; resize:vertical; line-height:1.6; }
+textarea:focus, select:focus, input:focus { border-color:#927bff; box-shadow:0 0 0 3px #7857ff20; }
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.hint { color:#85879e; font-size:11px; line-height:1.5; margin-top:9px; }
+.wide { width:100%; margin-top:18px; }
+.status { margin-top:14px; padding:12px; border-radius:12px; background:#101d21; border:1px solid #22524d; color:#b8f8ed; font-size:12px; line-height:1.5; display:none; }
+.status.show { display:block; }
+.preview-box { min-height:300px; border:1px dashed #41435d; border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:22px; background:radial-gradient(ellipse at center,#22203d55,transparent 70%); }
+.play-icon { width:58px; height:58px; display:grid; place-items:center; border-radius:18px; background:#27213f; color:#b9a9ff; font-size:23px; margin-bottom:15px; }
+.preview-box strong { font-size:15px; }
+.preview-box p { color:#9698ad; font-size:12px; line-height:1.6; max-width:250px; }
+.fake-progress { width:100%; max-width:260px; height:6px; background:#292b40; border-radius:99px; overflow:hidden; margin-top:10px; display:none; }
+.fake-progress span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--site-primary),var(--accent2)); transition:width .5s; }
+.notice { margin-top:18px; border:1px solid #38344f; background:#171525; border-radius:14px; padding:14px 16px; color:#bcbad1; font-size:12px; line-height:1.6; }
+.notice b { color:#f1edff; }
+.features { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:30px; }
+.feature { padding:17px; border:1px solid var(--line); background:#11131d; border-radius:16px; }
+.feature .ico { font-size:20px; margin-bottom:11px; }
+.feature b { display:block; font-size:13px; }
+.feature p { color:#9294aa; font-size:12px; line-height:1.6; margin-bottom:0; }
+footer { border-top:1px solid #242638; color:#777a91; text-align:center; padding:22px; font-size:11px; }
+@media(max-width:780px) { .hero { grid-template-columns:1fr; padding-top:24px; gap:26px; } .preview-art { min-height:280px; } .art-window { min-height:248px; } .workspace { grid-template-columns:1fr; } .features { grid-template-columns:1fr; } .section-heading { align-items:start; flex-direction:column; } }
+@media(max-width:420px) { .topbar { padding:16px; } .hero, main { padding-left:16px; padding-right:16px; } h1 { font-size:42px; } .field-row { grid-template-columns:1fr; } .pill { font-size:10px; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><div class="brandmark">SH</div><div class="brandname">SH <span>AI VIDEO</span></div></div>
+    <div class="pill">✦ Ранен прототип · v0.1</div>
+  </header>
+  <section class="hero">
+    <div class="glow"></div>
+    <div>
+      <div class="eyebrow">Твоята идея. Твоят свят.</div>
+      <h1>Превърни думите си в <em>движещи се истории.</em></h1>
+      <p class="lead">Експериментален интерфейс за бъдещ AI генератор на видео. Започваме с прост прототип и постепенно ще изграждаме истинската AI система.</p>
+      <div class="hero-actions"><button class="btn btn-primary" onclick="document.getElementById('prompt').focus();document.getElementById('studio').scrollIntoView({behavior:'smooth'});">✦ Създай първата сцена</button><button class="btn btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'});">Как работи</button></div>
+      <div class="hero-note">Без регистрация за демото · Без плащане · Работи на телефон</div>
+    </div>
+    <div class="preview-art" aria-label="Декоративна примерна анимационна сцена">
+      <div class="art-window"><div class="moon"></div><div class="city"><div class="building" style="height:52%"></div><div class="building" style="height:73%"></div><div class="building" style="height:43%"></div><div class="building" style="height:88%"></div><div class="building" style="height:60%"></div><div class="building" style="height:77%"></div><div class="building" style="height:48%"></div></div><div class="character"><div class="hair"></div><div class="head"></div><div class="body"></div></div><div class="art-caption"><small>SH AI VIDEO · CONCEPT 001</small><strong>Всичко започва с една мечта.</strong></div></div><div class="floating-tag">◉ Cinematic animation concept</div>
+    </div>
+  </section>
+  <main>
+    <div class="section-heading" id="studio"><div><h2>AI видео студио</h2><div class="section-sub">Опиши какво искаш да видиш.</div></div><div class="pill">Демо интерфейс</div></div>
+    <div class="workspace">
+      <section class="card">
+        <label class="label" for="prompt">Описание на сцената</label>
+        <textarea id="prompt" maxlength="1200" placeholder="Например: Млад герой стои на покрив през нощта и гледа към футуристичен град..."></textarea>
+        <div class="hint"><span id="count">0</span>/1200 знака · Съвет: опиши героя, мястото, действието и стила.</div>
+        <div class="field-row">
+          <div><label class="label" for="style">Визуален стил</label><select id="style"><option>3D анимация</option><option>Аниме</option><option>Картoon / комикс</option><option>Кинематографичен реализъм</option></select></div>
+          <div><label class="label" for="ratio">Формат на видеото</label><select id="ratio"><option value="9:16">Вертикално · 9:16</option><option value="16:9">Широко · 16:9</option><option value="1:1">Квадратно · 1:1</option></select></div>
+        </div>
+        <button class="btn btn-primary wide" id="generate">✦ Подготви заявката</button>
+        <div class="status" id="status" role="status"></div>
+      </section>
+      <section class="card">
+        <label class="label">Прозорец за резултата</label>
+        <div class="preview-box" id="preview"><div class="play-icon">▶</div><strong>Тук ще се появи твоето видео</strong><p>Това е първоначален прототип. Генерирането на истинско видео още не е свързано с AI модел.</p><div class="fake-progress" id="progress"><span id="bar"></span></div></div>
+        <div class="notice"><b>Следващата техническа стъпка:</b> да свържем този интерфейс с backend и модел за генериране на видео, който може да се изпълнява в GPU среда.</div>
+      </section>
+    </div>
+    <div class="features" id="how">
+      <div class="feature"><div class="ico">✎</div><b>1. Напиши идея</b><p>Опиши сцената със свои думи и избери стил и формат.</p></div>
+      <div class="feature"><div class="ico">⚙</div><b>2. AI обработка</b><p>В бъдещата версия сървърът ще изпраща заявката към видео модела.</p></div>
+      <div class="feature"><div class="ico">▶</div><b>3. Преглед и изтегляне</b><p>Когато бъде свързан модел, тук ще можеш да гледаш и запазваш резултата.</p></div>
+    </div>
+  </main>
+  <footer>SH AI VIDEO · Експериментален прототип · Не изпраща и не съхранява въведените от теб описания.</footer>
+</div>
+<script>
+const promptInput = document.getElementById('prompt');
+const count = document.getElementById('count');
+const statusBox = document.getElementById('status');
+const generateButton = document.getElementById('generate');
+const progress = document.getElementById('progress');
+const bar = document.getElementById('bar');
+promptInput.addEventListener('input', () => { count.textContent = promptInput.value.length; });
+generateButton.addEventListener('click', () => {
+  const prompt = promptInput.value.trim();
+  statusBox.classList.add('show');
+  if (!prompt) {
+    statusBox.textContent = 'Първо напиши кратко описание на сцената.';
+    promptInput.focus();
+    return;
+  }
+  const style = document.getElementById('style').value;
+  const ratio = document.getElementById('ratio').value;
+  statusBox.textContent = 'Заявката е подготвена локално. Стил: ' + style + '. Формат: ' + ratio + '. Описанието не е изпратено към сървър.';
+  progress.style.display = 'block';
+  bar.style.width = '100%';
+  document.getElementById('preview').querySelector('strong').textContent = 'Заявката е готова за AI интеграция';
+  document.getElementById('preview').querySelector('p').textContent = 'След като свържем видео модел, този прозорец ще показва генерирания клип. В момента не е създаден видеофайл.';
+});
+</script>
+</body>
+</html>
